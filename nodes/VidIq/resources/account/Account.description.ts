@@ -30,6 +30,7 @@ export const accountDescription: INodeProperties[] = [
   {
     displayName: "Type",
     name: "type",
+    required: true,
     type: "options",
     options: [
       { name: "Bug Report", value: "bug_report" },
@@ -53,6 +54,7 @@ export const accountDescription: INodeProperties[] = [
   {
     displayName: "Description",
     name: "description",
+    required: true,
     type: "string",
     default: "",
     description: "What you're requesting, reporting, or suggesting — and why",

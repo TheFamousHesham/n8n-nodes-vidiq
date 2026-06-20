@@ -31,6 +31,7 @@ export const jobDescription: INodeProperties[] = [
   {
     displayName: "MCP Job ID",
     name: "mcpJobId",
+    required: true,
     type: "string",
     default: "",
     description: "The job ID returned by a *_start tool",

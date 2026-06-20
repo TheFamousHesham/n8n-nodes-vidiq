@@ -57,6 +57,7 @@ export const videoDescription: INodeProperties[] = [
   {
     displayName: "Video",
     name: "video",
+    required: true,
     type: "string",
     default: "",
     description: "YouTube video ID or canonical watch/shorts/youtu.be URL",
@@ -117,6 +118,7 @@ export const videoDescription: INodeProperties[] = [
   {
     displayName: "Video IDs",
     name: "videoIds",
+    required: true,
     type: "string",
     default: "",
     placeholder: "a, b, c",
@@ -128,6 +130,7 @@ export const videoDescription: INodeProperties[] = [
   {
     displayName: "Query",
     name: "query",
+    required: true,
     type: "string",
     default: "",
     description: "Free-text search query (e.g. 'minecraft redstone tutorial')",
@@ -262,6 +265,7 @@ export const videoDescription: INodeProperties[] = [
   {
     displayName: "Video ID",
     name: "videoId",
+    required: true,
     type: "string",
     default: "",
     description: "YouTube video ID (e.g. 'dQw4w9WgXcQ')",
@@ -270,6 +274,7 @@ export const videoDescription: INodeProperties[] = [
   {
     displayName: "Granularity",
     name: "granularity",
+    required: true,
     type: "options",
     options: [
       { name: "Daily", value: "daily" },
@@ -313,6 +318,7 @@ export const videoDescription: INodeProperties[] = [
   {
     displayName: "Video ID",
     name: "videoId",
+    required: true,
     type: "string",
     default: "",
     description: "YouTube video ID (e.g. 'dQw4w9WgXcQ')",

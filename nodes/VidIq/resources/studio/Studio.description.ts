@@ -16,56 +16,64 @@ export const studioDescription: INodeProperties[] = [
         name: "Clone Voice (Upload)",
         value: "cloneVoiceUpload",
         action: "Clone a voice from an uploaded audio sample",
-        description: "Create a cloned voice from an uploaded audio sample",
+        description:
+          "Create a cloned voice from an uploaded audio sample. Consumes vidIQ credits.",
       },
       {
         name: "Clone Voice From YouTube",
         value: "cloneVoiceFromYoutube",
         action: "Clone a voice from a you tube video",
-        description: "Start a job that clones a voice from a YouTube video",
+        description:
+          "Start a job that clones a voice from a YouTube video. Consumes vidIQ credits.",
       },
       {
         name: "Compose",
         value: "compose",
         action: "Compose a video from scenes",
         description:
-          "Render a video from scenes, voiceover, music, overlays and captions",
+          "Render a video from scenes, voiceover, music, overlays and captions. Consumes vidIQ credits.",
       },
       {
         name: "Find B-Roll",
         value: "findBroll",
         action: "Find b roll footage",
-        description: "Search for stock b-roll footage matching a query",
+        description:
+          "Search for stock b-roll footage matching a query. Consumes vidIQ credits.",
       },
       {
         name: "Generate Clips",
         value: "generateClips",
         action: "Generate clips from a video",
-        description: "Start a job that cuts a long video into short clips",
+        description:
+          "Start a job that cuts a long video into short clips. Consumes vidIQ credits.",
       },
       {
         name: "Generate Thumbnail",
         value: "generateThumbnail",
         action: "Generate a thumbnail",
-        description: "Start a job that generates a thumbnail for a video",
+        description:
+          "Start a job that generates a thumbnail for a video. Consumes vidIQ credits.",
       },
       {
         name: "Generate Titles",
         value: "generateTitles",
         action: "Generate video titles",
-        description: "Generate optimized title suggestions for a video",
+        description:
+          "Generate optimized title suggestions for a video. Consumes vidIQ credits.",
       },
       {
         name: "Generate Video",
         value: "generateVideo",
         action: "Generate a video",
-        description: "Start a job that generates a video from a prompt",
+        description:
+          "Start a job that generates a video from a prompt. Consumes vidIQ credits.",
       },
       {
         name: "Generate Voiceover",
         value: "generateVoiceover",
         action: "Generate a voiceover",
-        description: "Generate a voiceover audio track from a script",
+        description:
+          "Generate a voiceover audio track from a script. Consumes vidIQ credits.",
       },
       {
         name: "List Voices",
@@ -78,19 +86,21 @@ export const studioDescription: INodeProperties[] = [
         value: "refineThumbnail",
         action: "Refine a thumbnail",
         description:
-          "Start a job that refines an existing thumbnail with instructions",
+          "Start a job that refines an existing thumbnail with instructions. Consumes vidIQ credits.",
       },
       {
         name: "Score Thumbnail",
         value: "scoreThumbnail",
         action: "Score a thumbnail",
-        description: "Score how well a thumbnail is likely to perform",
+        description:
+          "Score how well a thumbnail is likely to perform. Consumes vidIQ credits.",
       },
       {
         name: "Score Title",
         value: "scoreTitle",
         action: "Score a title",
-        description: "Score how well a title is likely to perform",
+        description:
+          "Score how well a title is likely to perform. Consumes vidIQ credits.",
       },
     ],
     default: "cloneVoiceUpload",
@@ -100,6 +110,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Name",
     name: "name",
+    required: true,
     type: "string",
     default: "",
     description: "Name for the cloned voice",
@@ -167,6 +178,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "YouTube URL",
     name: "youtubeUrl",
+    required: true,
     type: "string",
     default: "",
     description: "URL of the YouTube video to clone the voice from",
@@ -175,6 +187,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Name",
     name: "name",
+    required: true,
     type: "string",
     default: "",
     description: "Name for the cloned voice",
@@ -185,6 +198,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Scenes",
     name: "scenes",
+    required: true,
     type: "json",
     default: "[]",
     description:
@@ -194,6 +208,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Format",
     name: "format",
+    required: true,
     type: "options",
     options: [
       { name: "Landscape", value: "landscape" },
@@ -241,6 +256,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Query",
     name: "query",
+    required: true,
     type: "string",
     default: "",
     description: "Search query describing the b-roll footage to find",
@@ -626,6 +642,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Prompt",
     name: "prompt",
+    required: true,
     type: "string",
     default: "",
     description: "Text prompt describing the video to generate",
@@ -654,6 +671,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Resolution",
     name: "resolution",
+    required: true,
     type: "options",
     options: [
       { name: "1024p", value: "1024p" },
@@ -790,6 +808,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Script",
     name: "script",
+    required: true,
     type: "string",
     default: "",
     description: "Script text to convert into a voiceover",
@@ -798,6 +817,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Voice ID",
     name: "voiceId",
+    required: true,
     type: "string",
     default: "",
     description: "ID of the voice to use for the voiceover",
@@ -861,6 +881,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Instructions",
     name: "instructions",
+    required: true,
     type: "string",
     default: "",
     description: "Instructions describing how to refine the thumbnail",
@@ -976,6 +997,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Video ID",
     name: "videoId",
+    required: true,
     type: "string",
     default: "",
     description: "ID of the video the thumbnail belongs to",
@@ -984,6 +1006,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Title",
     name: "title",
+    required: true,
     type: "string",
     default: "",
     description: "Title of the video",
@@ -1034,6 +1057,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Title",
     name: "title",
+    required: true,
     type: "string",
     default: "",
     description: "Title to score",
@@ -1042,6 +1066,7 @@ export const studioDescription: INodeProperties[] = [
   {
     displayName: "Type",
     name: "type",
+    required: true,
     type: "options",
     options: [
       { name: "Long", value: "long" },

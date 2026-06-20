@@ -86,6 +86,7 @@ export const channelDescription: INodeProperties[] = [
   {
     displayName: "Channel ID",
     name: "channelId",
+    required: true,
     type: "string",
     default: "",
     description: "YouTube channel ID to retrieve analytics for",
@@ -154,6 +155,7 @@ export const channelDescription: INodeProperties[] = [
   {
     displayName: "Query",
     name: "query",
+    required: true,
     type: "string",
     default: "",
     description: "Search query to find breakout channels for",
@@ -219,6 +221,7 @@ export const channelDescription: INodeProperties[] = [
   {
     displayName: "Niche",
     name: "niche",
+    required: true,
     type: "string",
     default: "",
     description: "Niche or topic to find similar channels for",
@@ -280,6 +283,7 @@ export const channelDescription: INodeProperties[] = [
   {
     displayName: "Channel IDs",
     name: "channelIds",
+    required: true,
     type: "string",
     default: "",
     placeholder: "a, b, c",
@@ -291,6 +295,7 @@ export const channelDescription: INodeProperties[] = [
   {
     displayName: "Channel ID",
     name: "channelId",
+    required: true,
     type: "string",
     default: "",
     description: "YouTube channel ID to retrieve performance trends for",
@@ -301,6 +306,7 @@ export const channelDescription: INodeProperties[] = [
   {
     displayName: "Channel ID",
     name: "channelId",
+    required: true,
     type: "string",
     default: "",
     description: "YouTube channel ID to retrieve stats for",
@@ -327,6 +333,7 @@ export const channelDescription: INodeProperties[] = [
   {
     displayName: "Channel ID",
     name: "channelId",
+    required: true,
     type: "string",
     default: "",
     description: "YouTube channel ID to list videos for",
@@ -335,6 +342,7 @@ export const channelDescription: INodeProperties[] = [
   {
     displayName: "Video Format",
     name: "videoFormat",
+    required: true,
     type: "options",
     options: [
       { name: "Live", value: "live" },
@@ -358,6 +366,7 @@ export const channelDescription: INodeProperties[] = [
   {
     displayName: "YouTube Channel ID",
     name: "youtubeChannelId",
+    required: true,
     type: "string",
     default: "",
     description: "YouTube channel ID to list competitors for",
@@ -950,6 +959,7 @@ export const channelDescription: INodeProperties[] = [
   {
     displayName: "YouTube Channel ID",
     name: "youtubeChannelId",
+    required: true,
     type: "string",
     default: "",
     description: "YouTube channel ID to update competitors for",

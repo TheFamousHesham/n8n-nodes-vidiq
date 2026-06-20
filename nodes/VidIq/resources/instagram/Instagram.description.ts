@@ -51,6 +51,7 @@ export const instagramDescription: INodeProperties[] = [
   {
     displayName: "Niche",
     name: "niche",
+    required: true,
     type: "string",
     default: "",
     description:
@@ -60,6 +61,7 @@ export const instagramDescription: INodeProperties[] = [
   {
     displayName: "Audience Query",
     name: "audienceQuery",
+    required: true,
     type: "string",
     default: "",
     description:
@@ -87,6 +89,7 @@ export const instagramDescription: INodeProperties[] = [
   {
     displayName: "Reel",
     name: "reel",
+    required: true,
     type: "string",
     default: "",
     description:
@@ -107,6 +110,7 @@ export const instagramDescription: INodeProperties[] = [
   {
     displayName: "Query",
     name: "query",
+    required: true,
     type: "string",
     default: "",
     description: "Search query describing the reels to find",
@@ -115,6 +119,7 @@ export const instagramDescription: INodeProperties[] = [
   {
     displayName: "Audience Query",
     name: "audienceQuery",
+    required: true,
     type: "string",
     default: "",
     description:
@@ -283,6 +288,7 @@ export const instagramDescription: INodeProperties[] = [
   {
     displayName: "Handle",
     name: "handle",
+    required: true,
     type: "string",
     default: "",
     description: "Instagram handle (with or without leading @); 1-30 chars",
@@ -293,6 +299,7 @@ export const instagramDescription: INodeProperties[] = [
   {
     displayName: "Handle",
     name: "handle",
+    required: true,
     type: "string",
     default: "",
     description: "Instagram handle (with or without leading @); 1-30 chars",

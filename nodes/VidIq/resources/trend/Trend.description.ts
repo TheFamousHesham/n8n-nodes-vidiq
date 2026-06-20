@@ -39,6 +39,7 @@ export const trendDescription: INodeProperties[] = [
   {
     displayName: "Video Format",
     name: "videoFormat",
+    required: true,
     type: "options",
     options: [
       { name: "Long", value: "long" },
