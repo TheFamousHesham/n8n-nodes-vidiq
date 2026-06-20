@@ -1,4 +1,5 @@
 import { type INodeProperties } from "n8n-workflow";
+import { optionsField } from "../../helpers/common";
 
 const show = (operation: string) => ({
   show: { resource: ["channel"], operation: [operation] },
@@ -33,7 +34,7 @@ export const channelDescription: INodeProperties[] = [
       {
         name: "Get Many by IDs",
         value: "getMany",
-        action: "Get many channels by i ds",
+        action: "Get many channels by ID",
         description: "Fetch multiple channels by their YouTube IDs",
       },
       {
@@ -61,22 +62,10 @@ export const channelDescription: INodeProperties[] = [
         description: "List videos published by a channel",
       },
       {
-        name: "List Competitors",
-        value: "listCompetitors",
-        action: "List channel competitors",
-        description: "List the tracked competitors for a channel",
-      },
-      {
         name: "Search",
         value: "search",
         action: "Search channels",
         description: "Search channels with rich filters",
-      },
-      {
-        name: "Update Competitors",
-        value: "updateCompetitors",
-        action: "Update channel competitors",
-        description: "Follow or unfollow competitors for a channel",
       },
     ],
     default: "analytics",
@@ -84,12 +73,14 @@ export const channelDescription: INodeProperties[] = [
 
   // ----- Analytics -----
   {
-    displayName: "Channel ID",
+    displayName: "Channel Name or ID",
     name: "channelId",
+    type: "options",
     required: true,
-    type: "string",
+    typeOptions: { loadOptionsMethod: "getMyChannels" },
     default: "",
-    description: "YouTube channel ID to retrieve analytics for",
+    description:
+      'Pick one of your vidIQ-linked channels (analytics are only available for channels you own). Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
     displayOptions: show("analytics"),
   },
   {
@@ -97,7 +88,8 @@ export const channelDescription: INodeProperties[] = [
     name: "startDate",
     type: "string",
     default: "",
-    description: "Start of the analytics date range (e.g. YYYY-MM-DD)",
+    placeholder: "2026-05-01",
+    description: "Start date in YYYY-MM-DD format (defaults to 28 days ago)",
     displayOptions: show("analytics"),
   },
   {
@@ -105,49 +97,29 @@ export const channelDescription: INodeProperties[] = [
     name: "endDate",
     type: "string",
     default: "",
-    description: "End of the analytics date range (e.g. YYYY-MM-DD)",
+    placeholder: "2026-05-01",
+    description: "End date in YYYY-MM-DD format (defaults to today)",
     displayOptions: show("analytics"),
   },
   {
     displayName: "Metrics",
     name: "metrics",
-    type: "string",
-    default: "",
-    placeholder: "views, likes, comments",
-    description: "Analytics metrics to return (comma-separated)",
-    displayOptions: show("analytics"),
-  },
-  {
-    displayName: "Dimensions",
-    name: "dimensions",
-    type: "string",
-    default: "",
-    placeholder: "day, country",
-    description: "Analytics dimensions to group by (comma-separated)",
-    displayOptions: show("analytics"),
-  },
-  {
-    displayName: "Max Results",
-    name: "maxResults",
-    type: "number",
-    default: 0,
-    description: "Maximum number of analytics rows to return",
-    displayOptions: show("analytics"),
-  },
-  {
-    displayName: "Filters",
-    name: "filters",
-    type: "string",
-    default: "",
-    description: "Analytics filter expression to apply",
-    displayOptions: show("analytics"),
-  },
-  {
-    displayName: "Sort",
-    name: "sort",
-    type: "string",
-    default: "",
-    description: "Sort field, prefix with '-' for descending (e.g. '-views')",
+    type: "multiOptions",
+    default: [],
+    options: [
+      { name: "Average View Duration", value: "averageViewDuration" },
+      { name: "Average View Percentage", value: "averageViewPercentage" },
+      { name: "Comments", value: "comments" },
+      { name: "Dislikes", value: "dislikes" },
+      { name: "Estimated Minutes Watched", value: "estimatedMinutesWatched" },
+      { name: "Likes", value: "likes" },
+      { name: "Shares", value: "shares" },
+      { name: "Subscribers Gained", value: "subscribersGained" },
+      { name: "Subscribers Lost", value: "subscribersLost" },
+      { name: "Views", value: "views" },
+    ],
+    description:
+      "Metrics to retrieve (defaults to views, watch time, subscribers gained, likes, comments when empty)",
     displayOptions: show("analytics"),
   },
 
@@ -262,11 +234,12 @@ export const channelDescription: INodeProperties[] = [
     displayOptions: show("findSimilar"),
   },
   {
-    displayName: "Size",
+    displayName: "Limit",
     name: "size",
     type: "number",
-    default: 0,
-    description: "Number of similar channels to return",
+    typeOptions: { minValue: 1, maxValue: 50 },
+    default: 50,
+    description: "Max number of similar channels to return (max 50)",
     displayOptions: show("findSimilar"),
   },
   {
@@ -274,7 +247,7 @@ export const channelDescription: INodeProperties[] = [
     name: "excludeChannelIds",
     type: "string",
     default: "",
-    placeholder: "a, b, c",
+    placeholder: "UCabc123, UCdef456",
     description: "Channel IDs to exclude from the results (comma-separated)",
     displayOptions: show("findSimilar"),
   },
@@ -286,7 +259,7 @@ export const channelDescription: INodeProperties[] = [
     required: true,
     type: "string",
     default: "",
-    placeholder: "a, b, c",
+    placeholder: "UCabc123, UCdef456",
     description: "YouTube channel IDs to fetch (comma-separated)",
     displayOptions: show("getMany"),
   },
@@ -317,7 +290,8 @@ export const channelDescription: INodeProperties[] = [
     name: "from",
     type: "string",
     default: "",
-    description: "Start of the stats date range (e.g. YYYY-MM-DD)",
+    placeholder: "2026-05-01",
+    description: "Start date in YYYY-MM-DD format (defaults to 30 days ago)",
     displayOptions: show("getStats"),
   },
   {
@@ -325,7 +299,8 @@ export const channelDescription: INodeProperties[] = [
     name: "to",
     type: "string",
     default: "",
-    description: "End of the stats date range (e.g. YYYY-MM-DD)",
+    placeholder: "2026-05-01",
+    description: "End date in YYYY-MM-DD format (defaults to today)",
     displayOptions: show("getStats"),
   },
 
@@ -354,23 +329,17 @@ export const channelDescription: INodeProperties[] = [
     displayOptions: show("getVideos"),
   },
   {
-    displayName: "Popular",
+    displayName: "Videos To Return",
     name: "popular",
-    type: "boolean",
-    default: false,
-    description: "Whether to return only popular videos",
+    type: "options",
+    options: [
+      { name: "Most Popular", value: "popular" },
+      { name: "Recent Uploads", value: "recent" },
+    ],
+    default: "popular",
+    description:
+      "Whether to return the channel's most popular videos or its most recent uploads",
     displayOptions: show("getVideos"),
-  },
-
-  // ----- List Competitors -----
-  {
-    displayName: "YouTube Channel ID",
-    name: "youtubeChannelId",
-    required: true,
-    type: "string",
-    default: "",
-    description: "YouTube channel ID to list competitors for",
-    displayOptions: show("listCompetitors"),
   },
 
   // ----- Search -----
@@ -400,9 +369,9 @@ export const channelDescription: INodeProperties[] = [
     name: "country",
     type: "string",
     default: "",
-    placeholder: "a, b, c",
+    placeholder: "US, GB",
     description:
-      "ISO 3166-1 alpha-2 country codes to filter by (comma-separated)",
+      "ISO 3166-1 alpha-2 country codes, comma-separated (e.g. US, GB, DE)",
     displayOptions: show("search"),
   },
   {
@@ -410,8 +379,8 @@ export const channelDescription: INodeProperties[] = [
     name: "languages",
     type: "string",
     default: "",
-    placeholder: "a, b, c",
-    description: "ISO 639-1 language codes to filter by (comma-separated)",
+    placeholder: "en, es",
+    description: "ISO 639-1 language codes, comma-separated (e.g. en, es)",
     displayOptions: show("search"),
   },
   {
@@ -712,7 +681,7 @@ export const channelDescription: INodeProperties[] = [
         name: "mainCategory",
         type: "string",
         default: "",
-        placeholder: "a, b, c",
+        placeholder: "Gaming, Education",
         description: "Main content categories to filter by (comma-separated)",
       },
       {
@@ -955,42 +924,5 @@ export const channelDescription: INodeProperties[] = [
     ],
   },
 
-  // ----- Update Competitors -----
-  {
-    displayName: "YouTube Channel ID",
-    name: "youtubeChannelId",
-    required: true,
-    type: "string",
-    default: "",
-    description: "YouTube channel ID to update competitors for",
-    displayOptions: show("updateCompetitors"),
-  },
-  {
-    displayName: "Follow",
-    name: "follow",
-    type: "string",
-    default: "",
-    placeholder: "a, b, c",
-    description: "Competitor channel IDs to start following (comma-separated)",
-    displayOptions: show("updateCompetitors"),
-  },
-  {
-    displayName: "Unfollow",
-    name: "unfollow",
-    type: "string",
-    default: "",
-    placeholder: "a, b, c",
-    description: "Competitor channel IDs to stop following (comma-separated)",
-    displayOptions: show("updateCompetitors"),
-  },
-
-  {
-    displayName: "Extra Arguments (JSON)",
-    name: "extraArguments",
-    type: "json",
-    default: "{}",
-    description:
-      "Advanced: raw vidIQ arguments merged as a base; typed fields above take precedence",
-    displayOptions: { show: { resource: ["channel"] } },
-  },
+  optionsField("channel"),
 ];

@@ -21,7 +21,7 @@ and presents clean, typed n8n operations — you never see MCP.
 
 > ⚠️ **Requires a vidIQ "Max" plan.** The API/MCP surface is only available on vidIQ's Max plan.
 >
-> ⚠️ **Generative operations consume vidIQ credits.** Anything under the **Studio** resource
+> ⚠️ **Generative operations consume vidIQ credits.** Anything under the **Studio & AI** resource
 > (title/thumbnail generation, video, clips, voiceover, b-roll) spends credits. Check your balance
 > with **Account → Get Credit Balance** before running them at scale.
 
@@ -44,34 +44,37 @@ npm install n8n-nodes-vidiq
 
 The node sends the key as `Authorization: Bearer <key>`.
 
-## Resources & operations (43 tools)
+## Resources & operations (40 operations)
 
 | Resource | Operations |
 |---|---|
 | **Keyword** | Research |
 | **Trend** | Trending Videos · Video Outliers · Categories |
-| **Channel** | Get Stats · Search · Get Many by IDs · Get Videos · Get Performance Trends · Analytics · Find Similar · Find Breakout · Get My Channels · List Competitors · Update Competitors |
+| **Channel** | Get Stats · Search · Get Many by IDs · Get Videos · Get Performance Trends · Analytics · Find Similar · Find Breakout · Get My Channels |
 | **Video** | Get Many by IDs · Search YouTube · Stats History · Transcript · Comments · Analyze |
-| **Studio** | Score Title · Score Thumbnail · Generate Titles · Generate Thumbnail · Refine Thumbnail · Generate Video · Generate Clips · Compose · Find B-Roll · List Voices · Generate Voiceover · Clone Voice (Upload) · Clone Voice From YouTube |
+| **Studio & AI** | Score Title · Score Thumbnail · Generate Titles · Generate Thumbnail · Refine Thumbnail · Generate Video · Generate Clips · Compose · Find B-Roll · List Voices · Generate Voiceover · Clone Voice (Upload) · Clone Voice From YouTube |
 | **Instagram** | Get Profile · Profile Reels · Find Outlier Reels · Accounts From Outliers · Analyze Reel |
-| **Account** | Get Credit Balance · Submit Feedback |
+| **Account** | Get Credit Balance |
 | **Job** | Get Job Status · List Jobs |
 
 ## Notes & patterns
 
-- **Async renders (Studio).** `Generate Video`, `Generate Clips`, `Compose`, the thumbnail
+- **IDs over URLs.** `Video ID`, `Reel`, and channel IDs accept a bare ID/shortcode (a full URL also
+  works — vidIQ normalizes it), so you won't get errors from a missing `www.` or a trailing slash.
+- **Channel Analytics.** The `Channel` field is a dropdown of your vidIQ-linked channels (analytics
+  are only available for channels you own). Dates use `YYYY-MM-DD`; metrics is a multi-select.
+- **Async renders (Studio & AI).** `Generate Video`, `Generate Clips`, `Compose`, the thumbnail
   generators and `Clone Voice From YouTube` run asynchronously and return a job object containing an
   `mcpJobId`. Poll it with **Job → Get Job Status**. For long renders, loop with n8n's **Wait** node
   + an **IF** node until the status is `completed` (or `failed`/`expired`). (n8n Cloud does not allow
   nodes to block while waiting, so the node does not poll internally.)
-- **Binary inputs.** Image/audio inputs (thumbnail scoring/generation, voice cloning, start/end
-  video frames) accept either a **URL** or an n8n **Binary Property** — switch with the field's
-  *Input Type* selector.
-- **Extra Arguments (JSON).** Every resource has an *Extra Arguments (JSON)* field. Anything you put
-  there is merged into the underlying tool call as a base (typed fields above always win), so new or
-  niche vidIQ parameters are reachable without waiting for a node update.
-- **Credits.** Read/analytics operations are cheap; generative Studio operations cost more. Watch
-  **Account → Get Credit Balance**.
+- **Binary I/O.** Image/audio inputs (thumbnail scoring/generation, voice cloning, video frames)
+  accept a **URL** or an n8n **Binary Property** via each field's *Input Type* selector. `Generate
+  Voiceover` with output **URL and Audio** returns the MP3 as a downloadable **binary** attachment.
+- **Timeout.** Every operation has an **Options → Timeout (ms)** setting so a stalled request fails
+  fast instead of hanging.
+- **Credits.** Read/analytics operations are cheap; generative Studio & AI operations cost more (each
+  is labelled "Consumes vidIQ credits"). Watch **Account → Get Credit Balance**.
 - **Use as an AI tool.** The node is exposed as an n8n AI tool (`usableAsTool`), so an AI Agent can
   call vidIQ operations directly.
 

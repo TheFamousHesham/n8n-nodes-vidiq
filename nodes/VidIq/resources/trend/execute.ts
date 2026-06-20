@@ -3,7 +3,8 @@ import {
   type IDataObject,
   type IExecuteFunctions,
 } from "n8n-workflow";
-import { buildArgs, parseJsonParam, toStringArray } from "../../helpers/args";
+import { buildArgs, toStringArray } from "../../helpers/args";
+import { readTimeout } from "../../helpers/common";
 import { vidiqToolCall } from "../../transport/mcpClient";
 
 export async function trendExecute(
@@ -12,8 +13,12 @@ export async function trendExecute(
   i: number,
 ): Promise<IDataObject | IDataObject[]> {
   if (operation === "categories") {
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_trend_categories", buildArgs({}, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_trend_categories",
+      buildArgs({}),
+      readTimeout(ctx, i),
+    );
   }
 
   if (operation === "trendingVideos") {
@@ -46,11 +51,11 @@ export async function trendExecute(
       sortBy: ctx.getNodeParameter("sortBy", i, "relevance") as string,
       limit: ctx.getNodeParameter("limit", i, 50) as number,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_trending_videos",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -82,8 +87,12 @@ export async function trendExecute(
       sort: ctx.getNodeParameter("sort", i, "breakoutScore") as string,
       limit: ctx.getNodeParameter("limit", i, 50) as number,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_outliers", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_outliers",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   throw new NodeOperationError(

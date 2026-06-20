@@ -1,4 +1,5 @@
 import { type INodeProperties } from "n8n-workflow";
+import { optionsField } from "../../helpers/common";
 
 const show = (operation: string) => ({
   show: { resource: ["job"], operation: [operation] },
@@ -69,13 +70,5 @@ export const jobDescription: INodeProperties[] = [
     description: "Max number of results to return",
     displayOptions: show("listJobs"),
   },
-  {
-    displayName: "Extra Arguments (JSON)",
-    name: "extraArguments",
-    type: "json",
-    default: "{}",
-    description:
-      "Advanced: raw vidIQ arguments merged as a base; typed fields above take precedence",
-    displayOptions: { show: { resource: ["job"] } },
-  },
+  optionsField("job"),
 ];

@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('../nodes/VidIq/transport/mcpClient', () => ({
 	vidiqToolCall: vi.fn(async (_ctx, tool, args) => ({ tool, args })),
+	DEFAULT_TIMEOUT_MS: 60000,
 }));
 
 import { keywordExecute } from '../nodes/VidIq/resources/keyword/execute';
@@ -29,12 +30,17 @@ describe('keywordExecute', () => {
 			'research',
 			0,
 		);
-		expect(vidiqToolCall).toHaveBeenCalledWith(expect.anything(), 'vidiq_keyword_research', {
-			keyword: 'minecraft',
-			mode: 'research',
-			includeRelated: true,
-			broad: false,
-			limit: 50,
-		});
+		expect(vidiqToolCall).toHaveBeenCalledWith(
+			expect.anything(),
+			'vidiq_keyword_research',
+			{
+				keyword: 'minecraft',
+				mode: 'research',
+				includeRelated: true,
+				broad: false,
+				limit: 50,
+			},
+			60000,
+		);
 	});
 });

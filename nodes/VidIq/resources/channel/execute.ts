@@ -3,7 +3,8 @@ import {
   type IDataObject,
   type IExecuteFunctions,
 } from "n8n-workflow";
-import { buildArgs, parseJsonParam, toStringArray } from "../../helpers/args";
+import { buildArgs, toStringArray } from "../../helpers/args";
+import { readTimeout } from "../../helpers/common";
 import { vidiqToolCall } from "../../transport/mcpClient";
 
 export async function channelExecute(
@@ -16,17 +17,13 @@ export async function channelExecute(
       channelId: ctx.getNodeParameter("channelId", i, "") as string,
       startDate: ctx.getNodeParameter("startDate", i, "") as string,
       endDate: ctx.getNodeParameter("endDate", i, "") as string,
-      metrics: toStringArray(ctx.getNodeParameter("metrics", i, [])),
-      dimensions: toStringArray(ctx.getNodeParameter("dimensions", i, [])),
-      maxResults: ctx.getNodeParameter("maxResults", i, 0) as number,
-      filters: ctx.getNodeParameter("filters", i, "") as string,
-      sort: ctx.getNodeParameter("sort", i, "") as string,
+      metrics: ctx.getNodeParameter("metrics", i, []) as string[],
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_channel_analytics",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -48,11 +45,11 @@ export async function channelExecute(
       faceless: ctx.getNodeParameter("faceless", i, false) as boolean,
       limit: ctx.getNodeParameter("limit", i, 50) as number,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_breakout_channels",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -68,11 +65,11 @@ export async function channelExecute(
         ctx.getNodeParameter("excludeChannelIds", i, []),
       ),
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_similar_channels",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -80,29 +77,33 @@ export async function channelExecute(
     const params: IDataObject = {
       channelIds: toStringArray(ctx.getNodeParameter("channelIds", i, [])),
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_get_channels_by_ids",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
   if (operation === "getMyChannels") {
     const params: IDataObject = {};
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_user_channels", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_user_channels",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   if (operation === "getPerformanceTrends") {
     const params: IDataObject = {
       channelId: ctx.getNodeParameter("channelId", i, "") as string,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_channel_performance_trends",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -112,33 +113,26 @@ export async function channelExecute(
       from: ctx.getNodeParameter("from", i, "") as string,
       to: ctx.getNodeParameter("to", i, "") as string,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_channel_stats", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_channel_stats",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   if (operation === "getVideos") {
     const params: IDataObject = {
       channelId: ctx.getNodeParameter("channelId", i, "") as string,
       videoFormat: ctx.getNodeParameter("videoFormat", i, "") as string,
-      popular: ctx.getNodeParameter("popular", i, false) as boolean,
+      popular:
+        (ctx.getNodeParameter("popular", i, "popular") as string) === "popular",
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_channel_videos", buildArgs(params, extra));
-  }
-
-  if (operation === "listCompetitors") {
-    const params: IDataObject = {
-      youtubeChannelId: ctx.getNodeParameter(
-        "youtubeChannelId",
-        i,
-        "",
-      ) as string,
-    };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
-      "vidiq_list_competitors",
-      buildArgs(params, extra),
+      "vidiq_channel_videos",
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -179,32 +173,11 @@ export async function channelExecute(
     if (additional.mainCategory !== undefined) {
       additional.mainCategory = toStringArray(additional.mainCategory);
     }
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    // Collection values are user-explicit (a key exists only when added), so merge
-    // them as literals that keep an explicit 0 or negative growth bound, unlike the
-    // top-level typed params whose forced 0 defaults are treated as "unset".
     return vidiqToolCall(
       ctx,
       "vidiq_channel_search",
-      buildArgs(params, { ...additional, ...extra }),
-    );
-  }
-
-  if (operation === "updateCompetitors") {
-    const params: IDataObject = {
-      youtubeChannelId: ctx.getNodeParameter(
-        "youtubeChannelId",
-        i,
-        "",
-      ) as string,
-      follow: toStringArray(ctx.getNodeParameter("follow", i, [])),
-      unfollow: toStringArray(ctx.getNodeParameter("unfollow", i, [])),
-    };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(
-      ctx,
-      "vidiq_update_competitors",
-      buildArgs(params, extra),
+      buildArgs(params, additional),
+      readTimeout(ctx, i),
     );
   }
 

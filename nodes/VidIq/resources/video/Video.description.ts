@@ -1,4 +1,5 @@
 import { type INodeProperties } from "n8n-workflow";
+import { optionsField } from "../../helpers/common";
 
 const show = (operation: string) => ({
   show: { resource: ["video"], operation: [operation] },
@@ -28,7 +29,7 @@ export const videoDescription: INodeProperties[] = [
       {
         name: "Get Many by IDs",
         value: "getMany",
-        action: "Get many videos by i ds",
+        action: "Get many videos by ID",
         description: "Fetch metadata for a list of video IDs",
       },
       {
@@ -55,12 +56,14 @@ export const videoDescription: INodeProperties[] = [
 
   // analyze -> vidiq_video_watch
   {
-    displayName: "Video",
+    displayName: "Video ID",
     name: "video",
     required: true,
     type: "string",
     default: "",
-    description: "YouTube video ID or canonical watch/shorts/youtu.be URL",
+    placeholder: "dQw4w9WgXcQ",
+    description:
+      "YouTube video ID (e.g. dQw4w9WgXcQ). A full watch / shorts / youtu.be URL also works — vidIQ normalizes it.",
     displayOptions: show("analyze"),
   },
   {
@@ -121,7 +124,7 @@ export const videoDescription: INodeProperties[] = [
     required: true,
     type: "string",
     default: "",
-    placeholder: "a, b, c",
+    placeholder: "dQw4w9WgXcQ, oHg5SJYRHA0",
     description: "List of YouTube video IDs to fetch (comma-separated)",
     displayOptions: show("getMany"),
   },
@@ -333,13 +336,5 @@ export const videoDescription: INodeProperties[] = [
     displayOptions: show("transcript"),
   },
 
-  {
-    displayName: "Extra Arguments (JSON)",
-    name: "extraArguments",
-    type: "json",
-    default: "{}",
-    description:
-      "Advanced: raw vidIQ arguments merged as a base; typed fields above take precedence",
-    displayOptions: { show: { resource: ["video"] } },
-  },
+  optionsField("video"),
 ];

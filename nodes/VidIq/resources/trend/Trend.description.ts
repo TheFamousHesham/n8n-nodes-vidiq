@@ -1,4 +1,5 @@
 import { type INodeProperties } from "n8n-workflow";
+import { optionsField } from "../../helpers/common";
 
 const show = (operation: string) => ({
   show: { resource: ["trend"], operation: [operation] },
@@ -155,7 +156,7 @@ export const trendDescription: INodeProperties[] = [
     name: "channelIds",
     type: "string",
     default: "",
-    placeholder: "a, b, c",
+    placeholder: "UCabc123, UCdef456",
     description:
       "Restrict results to one or more YouTube channels, by channel ID, handle, or URL (comma-separated)",
     displayOptions: show("videoOutliers"),
@@ -259,7 +260,7 @@ export const trendDescription: INodeProperties[] = [
     name: "trendCategories",
     type: "string",
     default: "",
-    placeholder: "a, b, c",
+    placeholder: "everything_wrong, i_survived",
     description:
       "Filter by trend category IDs, e.g. reaction, tier_list, mukbang (comma-separated)",
     displayOptions: show("videoOutliers"),
@@ -288,13 +289,5 @@ export const trendDescription: INodeProperties[] = [
     description: "Max number of results to return",
     displayOptions: show("videoOutliers"),
   },
-  {
-    displayName: "Extra Arguments (JSON)",
-    name: "extraArguments",
-    type: "json",
-    default: "{}",
-    description:
-      "Advanced: raw vidIQ arguments merged as a base; typed fields above take precedence",
-    displayOptions: { show: { resource: ["trend"] } },
-  },
+  optionsField("trend"),
 ];

@@ -1,4 +1,5 @@
 import { type INodeProperties } from "n8n-workflow";
+import { optionsField } from "../../helpers/common";
 
 const show = (operation: string) => ({
   show: { resource: ["instagram"], operation: [operation] },
@@ -92,8 +93,9 @@ export const instagramDescription: INodeProperties[] = [
     required: true,
     type: "string",
     default: "",
+    placeholder: "C9zX1aBcD2E",
     description:
-      "Instagram reel shortcode (e.g. C9zX1aBcD2E) or full reel/post URL",
+      "Instagram reel shortcode (e.g. C9zX1aBcD2E) or full reel/post URL — vidIQ normalizes it",
     displayOptions: show("analyzeReel"),
   },
   {
@@ -195,7 +197,7 @@ export const instagramDescription: INodeProperties[] = [
         name: "descriptionLanguage",
         type: "string",
         default: "",
-        placeholder: "a, b, c",
+        placeholder: "en, es",
         description:
           "Restrict to these description languages (comma-separated)",
       },
@@ -204,7 +206,7 @@ export const instagramDescription: INodeProperties[] = [
         name: "excludeShortcodes",
         type: "string",
         default: "",
-        placeholder: "a, b, c",
+        placeholder: "C9zX1aBcD2E, D8yW2bCdE3F",
         description:
           "Reel shortcodes to exclude from results (comma-separated)",
       },
@@ -213,7 +215,7 @@ export const instagramDescription: INodeProperties[] = [
         name: "excludeUserPosted",
         type: "string",
         default: "",
-        placeholder: "a, b, c",
+        placeholder: "nasa, spacex",
         description:
           "Users whose reels to exclude from results (comma-separated)",
       },
@@ -236,7 +238,7 @@ export const instagramDescription: INodeProperties[] = [
         name: "hashtags",
         type: "string",
         default: "",
-        placeholder: "a, b, c",
+        placeholder: "#space, #nasa",
         description: "Restrict to reels with these hashtags (comma-separated)",
       },
       {
@@ -306,13 +308,5 @@ export const instagramDescription: INodeProperties[] = [
     displayOptions: show("getProfileReels"),
   },
 
-  {
-    displayName: "Extra Arguments (JSON)",
-    name: "extraArguments",
-    type: "json",
-    default: "{}",
-    description:
-      "Advanced: raw vidIQ arguments merged as a base; typed fields above take precedence",
-    displayOptions: { show: { resource: ["instagram"] } },
-  },
+  optionsField("instagram"),
 ];

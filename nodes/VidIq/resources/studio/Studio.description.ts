@@ -1,4 +1,5 @@
 import { type INodeProperties } from "n8n-workflow";
+import { optionsField } from "../../helpers/common";
 
 const show = (operation: string) => ({
   show: { resource: ["studio"], operation: [operation] },
@@ -617,7 +618,7 @@ export const studioDescription: INodeProperties[] = [
     name: "previousTitles",
     type: "string",
     default: "",
-    placeholder: "a, b, c",
+    placeholder: "My old title, Another title",
     description: "Previously used titles to avoid repeating (comma-separated)",
     displayOptions: show("generateTitles"),
   },
@@ -806,12 +807,12 @@ export const studioDescription: INodeProperties[] = [
 
   // ----- Generate Voiceover -----
   {
-    displayName: "Script",
+    displayName: "Text to Convert to Speech",
     name: "script",
     required: true,
     type: "string",
     default: "",
-    description: "Script text to convert into a voiceover",
+    description: "The text to synthesize into speech (max 5000 characters)",
     displayOptions: show("generateVoiceover"),
   },
   {
@@ -1093,13 +1094,5 @@ export const studioDescription: INodeProperties[] = [
     displayOptions: show("scoreTitle"),
   },
 
-  {
-    displayName: "Extra Arguments (JSON)",
-    name: "extraArguments",
-    type: "json",
-    default: "{}",
-    description:
-      "Advanced: raw vidIQ arguments merged as a base; typed fields above take precedence",
-    displayOptions: { show: { resource: ["studio"] } },
-  },
+  optionsField("studio"),
 ];

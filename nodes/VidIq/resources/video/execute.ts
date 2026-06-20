@@ -3,7 +3,8 @@ import {
   type IDataObject,
   type IExecuteFunctions,
 } from "n8n-workflow";
-import { buildArgs, parseJsonParam, toStringArray } from "../../helpers/args";
+import { buildArgs, toStringArray } from "../../helpers/args";
+import { readTimeout } from "../../helpers/common";
 import { vidiqToolCall } from "../../transport/mcpClient";
 
 export async function videoExecute(
@@ -11,14 +12,17 @@ export async function videoExecute(
   operation: string,
   i: number,
 ): Promise<IDataObject | IDataObject[]> {
-  const extra = parseJsonParam(ctx, "extraArguments", i);
-
   if (operation === "analyze") {
     const params: IDataObject = {
       video: ctx.getNodeParameter("video", i, "") as string,
       prompt: ctx.getNodeParameter("prompt", i, "") as string,
     };
-    return vidiqToolCall(ctx, "vidiq_video_watch", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_video_watch",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   if (operation === "comments") {
@@ -28,7 +32,12 @@ export async function videoExecute(
       order: ctx.getNodeParameter("order", i, "relevance") as string,
       maxResult: ctx.getNodeParameter("maxResult", i, 0) as number,
     };
-    return vidiqToolCall(ctx, "vidiq_video_comments", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_video_comments",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   if (operation === "getMany") {
@@ -38,7 +47,8 @@ export async function videoExecute(
     return vidiqToolCall(
       ctx,
       "vidiq_get_videos_by_ids",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -57,7 +67,12 @@ export async function videoExecute(
       eventType: ctx.getNodeParameter("eventType", i, "") as string,
       topic: ctx.getNodeParameter("topic", i, "") as string,
     };
-    return vidiqToolCall(ctx, "vidiq_youtube_search", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_youtube_search",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   if (operation === "statsHistory") {
@@ -68,7 +83,12 @@ export async function videoExecute(
       to: ctx.getNodeParameter("to", i, "") as string,
       order: ctx.getNodeParameter("order", i, "asc") as string,
     };
-    return vidiqToolCall(ctx, "vidiq_video_stats", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_video_stats",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   if (operation === "transcript") {
@@ -79,7 +99,8 @@ export async function videoExecute(
     return vidiqToolCall(
       ctx,
       "vidiq_video_transcript",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 

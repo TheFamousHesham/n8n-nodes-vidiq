@@ -2,10 +2,12 @@ import {
   NodeOperationError,
   type IDataObject,
   type IExecuteFunctions,
+  type INodeExecutionData,
 } from "n8n-workflow";
 import { buildArgs, parseJsonParam, toStringArray } from "../../helpers/args";
+import { readTimeout } from "../../helpers/common";
 import { resolveBinaryOrUrl } from "../../helpers/binary";
-import { vidiqToolCall } from "../../transport/mcpClient";
+import { vidiqToolCall, vidiqToolCallFull } from "../../transport/mcpClient";
 
 // Render tools (compose / generate video & clips / thumbnails / voice clone) run
 // asynchronously and return a job descriptor with an `mcpJobId`. n8n Cloud does not
@@ -15,7 +17,7 @@ export async function studioExecute(
   ctx: IExecuteFunctions,
   operation: string,
   i: number,
-): Promise<IDataObject | IDataObject[]> {
+): Promise<IDataObject | IDataObject[] | INodeExecutionData[]> {
   if (operation === "cloneVoiceUpload") {
     const params: IDataObject = {
       name: ctx.getNodeParameter("name", i, "") as string,
@@ -32,11 +34,11 @@ export async function studioExecute(
       contentType: ctx.getNodeParameter("contentType", i, "") as string,
       description: ctx.getNodeParameter("description", i, "") as string,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_voiceover_clone",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -45,11 +47,11 @@ export async function studioExecute(
       youtubeUrl: ctx.getNodeParameter("youtubeUrl", i, "") as string,
       name: ctx.getNodeParameter("name", i, "") as string,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_voiceover_clone_start",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -62,8 +64,12 @@ export async function studioExecute(
       overlays: parseJsonParam(ctx, "overlays", i),
       captions: parseJsonParam(ctx, "captions", i),
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_compose", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_compose",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   if (operation === "findBroll") {
@@ -85,8 +91,12 @@ export async function studioExecute(
         0,
       ) as number,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_generate_broll", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_generate_broll",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   if (operation === "generateClips") {
@@ -119,8 +129,12 @@ export async function studioExecute(
         0,
       ) as number,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_generate_clips", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_generate_clips",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   if (operation === "generateThumbnail") {
@@ -157,11 +171,11 @@ export async function studioExecute(
       referenceImages: parseJsonParam(ctx, "referenceImages", i),
       feedback: parseJsonParam(ctx, "feedback", i),
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_generate_thumbnail",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -181,11 +195,11 @@ export async function studioExecute(
       competitorTitles: parseJsonParam(ctx, "competitorTitles", i),
       analysisSummary: ctx.getNodeParameter("analysisSummary", i, "") as string,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_generate_titles",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -223,8 +237,12 @@ export async function studioExecute(
         false,
       ),
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_generate_video", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_generate_video",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   if (operation === "generateVoiceover") {
@@ -233,20 +251,31 @@ export async function studioExecute(
       voiceId: ctx.getNodeParameter("voiceId", i, "") as string,
       output: ctx.getNodeParameter("output", i, "url_only") as string,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(
+    const { json, media } = await vidiqToolCallFull(
       ctx,
       "vidiq_voiceover_generate",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
+    const audio = media.find((m) => m.type === "audio");
+    if (audio) {
+      const buffer = Buffer.from(audio.data, "base64");
+      const binary = await ctx.helpers.prepareBinaryData(
+        buffer,
+        "voiceover.mp3",
+        audio.mimeType,
+      );
+      return [{ json, binary: { data: binary }, pairedItem: { item: i } }];
+    }
+    return json;
   }
 
   if (operation === "listVoices") {
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_voiceover_list_voices",
-      buildArgs({}, extra),
+      buildArgs({}),
+      readTimeout(ctx, i),
     );
   }
 
@@ -289,11 +318,11 @@ export async function studioExecute(
         false,
       ),
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_refine_thumbnail",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -310,11 +339,11 @@ export async function studioExecute(
         false,
       ),
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_score_thumbnail",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -325,8 +354,12 @@ export async function studioExecute(
       videoId: ctx.getNodeParameter("videoId", i, "") as string,
       channelId: ctx.getNodeParameter("channelId", i, "") as string,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_score_title", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_score_title",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   throw new NodeOperationError(

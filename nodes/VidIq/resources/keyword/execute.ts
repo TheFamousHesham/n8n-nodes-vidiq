@@ -3,7 +3,8 @@ import {
   type IDataObject,
   type IExecuteFunctions,
 } from "n8n-workflow";
-import { buildArgs, parseJsonParam } from "../../helpers/args";
+import { buildArgs } from "../../helpers/args";
+import { readTimeout } from "../../helpers/common";
 import { vidiqToolCall } from "../../transport/mcpClient";
 
 export async function keywordExecute(
@@ -24,11 +25,11 @@ export async function keywordExecute(
       broad: ctx.getNodeParameter("broad", i, false) as boolean,
       limit: ctx.getNodeParameter("limit", i, 50) as number,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_keyword_research",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
   throw new NodeOperationError(

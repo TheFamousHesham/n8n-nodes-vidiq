@@ -3,7 +3,8 @@ import {
   type IDataObject,
   type IExecuteFunctions,
 } from "n8n-workflow";
-import { buildArgs, parseJsonParam } from "../../helpers/args";
+import { buildArgs } from "../../helpers/args";
+import { readTimeout } from "../../helpers/common";
 import { vidiqToolCall } from "../../transport/mcpClient";
 
 export async function jobExecute(
@@ -15,8 +16,12 @@ export async function jobExecute(
     const params: IDataObject = {
       mcpJobId: ctx.getNodeParameter("mcpJobId", i, "") as string,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_job_poll", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_job_poll",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
   if (operation === "listJobs") {
     const params: IDataObject = {
@@ -24,8 +29,12 @@ export async function jobExecute(
       status: ctx.getNodeParameter("status", i, "inprogress") as string,
       limit: ctx.getNodeParameter("limit", i, 50) as number,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_jobs_list", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_jobs_list",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
   throw new NodeOperationError(
     ctx.getNode(),

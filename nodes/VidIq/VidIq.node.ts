@@ -6,10 +6,14 @@ import {
   NodeOperationError,
   type IDataObject,
   type IExecuteFunctions,
+  type ILoadOptionsFunctions,
   type INodeExecutionData,
+  type INodePropertyOptions,
   type INodeType,
   type INodeTypeDescription,
 } from "n8n-workflow";
+
+import { vidiqToolCall } from "./transport/mcpClient";
 
 import { accountDescription } from "./resources/account/Account.description";
 import { accountExecute } from "./resources/account/execute";
@@ -32,7 +36,7 @@ type ResourceExecute = (
   ctx: IExecuteFunctions,
   operation: string,
   itemIndex: number,
-) => Promise<IDataObject | IDataObject[]>;
+) => Promise<IDataObject | IDataObject[] | INodeExecutionData[]>;
 
 const executors: Record<string, ResourceExecute> = {
   account: accountExecute,
@@ -73,7 +77,7 @@ export class VidIq implements INodeType {
           { name: "Instagram", value: "instagram" },
           { name: "Job", value: "job" },
           { name: "Keyword", value: "keyword" },
-          { name: "Studio", value: "studio" },
+          { name: "Studio & AI", value: "studio" },
           { name: "Trend", value: "trend" },
           { name: "Video", value: "video" },
         ],
@@ -88,6 +92,42 @@ export class VidIq implements INodeType {
       ...trendDescription,
       ...videoDescription,
     ],
+  };
+
+  methods = {
+    loadOptions: {
+      // Populates the Channel ID dropdown for owner-only operations (e.g. Analytics)
+      // from the vidIQ-authorized channels, labelled with their titles.
+      async getMyChannels(
+        this: ILoadOptionsFunctions,
+      ): Promise<INodePropertyOptions[]> {
+        const res = await vidiqToolCall(this, "vidiq_user_channels", {});
+        const channels = (res.channels as IDataObject[] | undefined) ?? [];
+        const ids = channels
+          .map((c) => c.channelId as string)
+          .filter((id) => typeof id === "string" && id.length > 0);
+        if (ids.length === 0) return [];
+        const titles: Record<string, string> = {};
+        try {
+          const detail = await vidiqToolCall(
+            this,
+            "vidiq_get_channels_by_ids",
+            {
+              channelIds: ids,
+            },
+          );
+          for (const c of (detail.channels as IDataObject[] | undefined) ??
+            []) {
+            const id = (c.channelId ?? c.id) as string;
+            const title = (c.title ?? c.channelTitle ?? id) as string;
+            if (id) titles[id] = title;
+          }
+        } catch {
+          // Fall back to raw channel IDs as labels.
+        }
+        return ids.map((id) => ({ name: titles[id] ?? id, value: id }));
+      },
+    },
   };
 
   async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
@@ -110,7 +150,17 @@ export class VidIq implements INodeType {
         const operation = this.getNodeParameter("operation", i) as string;
         const result = await exec(this, operation, i);
         const rows = Array.isArray(result) ? result : [result];
-        for (const json of rows) out.push({ json, pairedItem: { item: i } });
+        for (const row of rows) {
+          // A resource may return a ready INodeExecutionData (e.g. with binary);
+          // otherwise wrap the plain JSON object.
+          if (row && typeof row === "object" && "binary" in row) {
+            const item = row as INodeExecutionData;
+            if (!item.pairedItem) item.pairedItem = { item: i };
+            out.push(item);
+          } else {
+            out.push({ json: row as IDataObject, pairedItem: { item: i } });
+          }
+        }
       } catch (error) {
         if (this.continueOnFail()) {
           out.push({

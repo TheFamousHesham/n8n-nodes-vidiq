@@ -3,7 +3,8 @@ import {
   type IDataObject,
   type IExecuteFunctions,
 } from "n8n-workflow";
-import { buildArgs, parseJsonParam, toStringArray } from "../../helpers/args";
+import { buildArgs, toStringArray } from "../../helpers/args";
+import { readTimeout } from "../../helpers/common";
 import { vidiqToolCall } from "../../transport/mcpClient";
 
 export async function instagramExecute(
@@ -18,11 +19,11 @@ export async function instagramExecute(
       followersMin: ctx.getNodeParameter("followersMin", i, 0) as number,
       followersMax: ctx.getNodeParameter("followersMax", i, 0) as number,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_ig_accounts_from_outliers",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
@@ -31,8 +32,12 @@ export async function instagramExecute(
       reel: ctx.getNodeParameter("reel", i, "") as string,
       prompt: ctx.getNodeParameter("prompt", i, "") as string,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_ig_reel_watch", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_ig_reel_watch",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   if (operation === "findOutlierReels") {
@@ -62,12 +67,11 @@ export async function instagramExecute(
         additionalFilters[key] = toStringArray(additionalFilters[key]);
       }
     }
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    // Collection values are user-explicit, so merge as literals (keep explicit 0).
     return vidiqToolCall(
       ctx,
       "vidiq_ig_outlier_reels_search",
-      buildArgs(params, { ...additionalFilters, ...extra }),
+      buildArgs(params, additionalFilters),
+      readTimeout(ctx, i),
     );
   }
 
@@ -75,19 +79,23 @@ export async function instagramExecute(
     const params: IDataObject = {
       handle: ctx.getNodeParameter("handle", i, "") as string,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_ig_profile", buildArgs(params, extra));
+    return vidiqToolCall(
+      ctx,
+      "vidiq_ig_profile",
+      buildArgs(params),
+      readTimeout(ctx, i),
+    );
   }
 
   if (operation === "getProfileReels") {
     const params: IDataObject = {
       handle: ctx.getNodeParameter("handle", i, "") as string,
     };
-    const extra = parseJsonParam(ctx, "extraArguments", i);
     return vidiqToolCall(
       ctx,
       "vidiq_ig_profile_reels",
-      buildArgs(params, extra),
+      buildArgs(params),
+      readTimeout(ctx, i),
     );
   }
 
