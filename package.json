@@ -1,0 +1,64 @@
+{
+  "name": "n8n-nodes-vidiq",
+  "version": "0.1.0",
+  "description": "n8n community node for vidIQ — YouTube & Instagram intelligence (keyword research, outliers, channel/video analytics, competitors) and AI content tools (titles, thumbnails, voiceover, video) via vidIQ's MCP API. Unofficial; not affiliated with vidIQ.",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "vidiq",
+    "youtube",
+    "seo",
+    "analytics",
+    "keyword-research",
+    "instagram",
+    "mcp"
+  ],
+  "homepage": "https://github.com/TheFamousHesham/n8n-nodes-vidiq",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheFamousHesham/n8n-nodes-vidiq.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TheFamousHesham/n8n-nodes-vidiq/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Hesham",
+    "email": "hesham@betterbrainlab.org"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "build:watch": "tsc --watch",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "test": "vitest run",
+    "smoke": "node test/smoke.mjs",
+    "release": "n8n-node release",
+    "prepublishOnly": "n8n-node prerelease"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/VidIqApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/VidIq/VidIq.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "*",
+    "eslint": "9.29.0",
+    "n8n-workflow": "*",
+    "prettier": "3.8.3",
+    "typescript": "5.9.3",
+    "vitest": "2.1.9"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}
