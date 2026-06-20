@@ -1,0 +1,14 @@
+{
+  "node": "n8n-nodes-vidiq.vidIq",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": ["Marketing", "Analytics"],
+  "resources": {
+    "credentialDocumentation": [
+      { "url": "https://github.com/TheFamousHesham/n8n-nodes-vidiq#credentials" }
+    ],
+    "primaryDocumentation": [
+      { "url": "https://github.com/TheFamousHesham/n8n-nodes-vidiq#readme" }
+    ]
+  }
+}
