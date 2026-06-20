@@ -18,6 +18,13 @@ describe('parseSse', () => {
 		expect(parseSse(raw)).toEqual({ a: 1, b: 2 });
 	});
 
+	it('skips keepalive/progress frames and returns the JSON-RPC response', () => {
+		const raw =
+			'event: message\ndata: {"jsonrpc":"2.0","method":"notifications/progress","params":{"p":1}}\n\n' +
+			'event: message\ndata: {"jsonrpc":"2.0","id":1,"result":{"ok":true}}\n\n';
+		expect(parseSse(raw)).toEqual({ jsonrpc: '2.0', id: 1, result: { ok: true } });
+	});
+
 	it('passes through an already-parsed object', () => {
 		const obj = { result: { ok: 1 } };
 		expect(parseSse(obj)).toEqual({ result: { ok: 1 } });

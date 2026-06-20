@@ -194,7 +194,7 @@ export async function studioExecute(
       prompt: ctx.getNodeParameter("prompt", i, "") as string,
       model: ctx.getNodeParameter("model", i, "sora-2") as string,
       resolution: ctx.getNodeParameter("resolution", i, "720p") as string,
-      duration: ctx.getNodeParameter("duration", i, 0) as number,
+      duration: ctx.getNodeParameter("duration", i, 8) as number,
       aspectRatio: ctx.getNodeParameter("aspectRatio", i, "9:16") as string,
       remixVideoId: ctx.getNodeParameter("remixVideoId", i, "") as string,
       remixProjectId: ctx.getNodeParameter("remixProjectId", i, "") as string,

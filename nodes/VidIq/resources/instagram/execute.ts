@@ -52,30 +52,22 @@ export async function instagramExecute(
       i,
       {},
     ) as IDataObject;
-    Object.assign(params, additionalFilters);
-    if (additionalFilters.descriptionLanguage !== undefined) {
-      params.descriptionLanguage = toStringArray(
-        additionalFilters.descriptionLanguage,
-      );
-    }
-    if (additionalFilters.hashtags !== undefined) {
-      params.hashtags = toStringArray(additionalFilters.hashtags);
-    }
-    if (additionalFilters.excludeShortcodes !== undefined) {
-      params.excludeShortcodes = toStringArray(
-        additionalFilters.excludeShortcodes,
-      );
-    }
-    if (additionalFilters.excludeUserPosted !== undefined) {
-      params.excludeUserPosted = toStringArray(
-        additionalFilters.excludeUserPosted,
-      );
+    for (const key of [
+      "descriptionLanguage",
+      "hashtags",
+      "excludeShortcodes",
+      "excludeUserPosted",
+    ]) {
+      if (additionalFilters[key] !== undefined) {
+        additionalFilters[key] = toStringArray(additionalFilters[key]);
+      }
     }
     const extra = parseJsonParam(ctx, "extraArguments", i);
+    // Collection values are user-explicit, so merge as literals (keep explicit 0).
     return vidiqToolCall(
       ctx,
       "vidiq_ig_outlier_reels_search",
-      buildArgs(params, extra),
+      buildArgs(params, { ...additionalFilters, ...extra }),
     );
   }
 

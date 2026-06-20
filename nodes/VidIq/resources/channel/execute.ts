@@ -176,12 +176,18 @@ export async function channelExecute(
       sort: ctx.getNodeParameter("sort", i, "") as string,
       limit: ctx.getNodeParameter("limit", i, 50) as number,
     };
-    Object.assign(params, additional);
     if (additional.mainCategory !== undefined) {
-      params.mainCategory = toStringArray(additional.mainCategory);
+      additional.mainCategory = toStringArray(additional.mainCategory);
     }
     const extra = parseJsonParam(ctx, "extraArguments", i);
-    return vidiqToolCall(ctx, "vidiq_channel_search", buildArgs(params, extra));
+    // Collection values are user-explicit (a key exists only when added), so merge
+    // them as literals that keep an explicit 0 or negative growth bound, unlike the
+    // top-level typed params whose forced 0 defaults are treated as "unset".
+    return vidiqToolCall(
+      ctx,
+      "vidiq_channel_search",
+      buildArgs(params, { ...additional, ...extra }),
+    );
   }
 
   if (operation === "updateCompetitors") {

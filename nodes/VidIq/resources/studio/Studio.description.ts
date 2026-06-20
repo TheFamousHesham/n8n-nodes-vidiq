@@ -668,8 +668,11 @@ export const studioDescription: INodeProperties[] = [
     displayName: "Duration",
     name: "duration",
     type: "number",
-    default: 0,
-    description: "Duration of the generated video in seconds",
+    default: 8,
+    required: true,
+    typeOptions: { minValue: 1 },
+    description:
+      "Duration of the generated video in seconds (required; valid range depends on the model)",
     displayOptions: show("generateVideo"),
   },
   {
