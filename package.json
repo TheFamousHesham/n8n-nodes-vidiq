@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-vidiq",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "n8n community node for vidIQ — YouTube & Instagram intelligence (keyword research, outliers, channel/video analytics, competitors) and AI content tools (titles, thumbnails, voiceover, video) via vidIQ's MCP API. Unofficial; not affiliated with vidIQ.",
   "keywords": [
     "n8n-community-node-package",

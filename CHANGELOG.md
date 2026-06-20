@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/); this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.1] - 2026-06-20
+
+### Changed
+- Icon: use the exact official vidIQ logo (embedded in the SVG) instead of a hand-drawn
+  approximation, so it renders identically everywhere (no font dependency).
+
 ## [0.2.0] - 2026-06-20
 
 UX overhaul from user review.
