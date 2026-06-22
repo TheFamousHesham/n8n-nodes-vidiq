@@ -23,7 +23,7 @@ export const studioDescription: INodeProperties[] = [
       {
         name: "Clone Voice From YouTube",
         value: "cloneVoiceFromYoutube",
-        action: "Clone a voice from a you tube video",
+        action: "Clone a voice from a video",
         description:
           "Start a job that clones a voice from a YouTube video. Consumes vidIQ credits.",
       },
@@ -37,7 +37,7 @@ export const studioDescription: INodeProperties[] = [
       {
         name: "Find B-Roll",
         value: "findBroll",
-        action: "Find b roll footage",
+        action: "Find stock footage",
         description:
           "Search for stock b-roll footage matching a query. Consumes vidIQ credits.",
       },
@@ -118,7 +118,7 @@ export const studioDescription: INodeProperties[] = [
     displayOptions: show("cloneVoiceUpload"),
   },
   {
-    displayName: "Audio Base64 Input Type",
+    displayName: "Audio Sample Input Type",
     name: "audioBase64InputType",
     type: "options",
     options: [
@@ -127,15 +127,15 @@ export const studioDescription: INodeProperties[] = [
     ],
     default: "url",
     description:
-      "Whether audioBase64 is provided as a URL or an n8n binary property",
+      "Whether the audio sample is provided as a URL or an n8n binary property",
     displayOptions: show("cloneVoiceUpload"),
   },
   {
-    displayName: "Audio Base64 (URL)",
+    displayName: "Audio Sample (URL)",
     name: "audioBase64",
     type: "string",
     default: "",
-    description: "AudioBase64 as a URL",
+    description: "The audio sample as a URL",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -145,11 +145,11 @@ export const studioDescription: INodeProperties[] = [
     },
   },
   {
-    displayName: "Audio Base64 Binary Property",
+    displayName: "Audio Sample Binary Property",
     name: "audioBase64BinaryProperty",
     type: "string",
     default: "data",
-    description: "Name of the binary property containing audioBase64",
+    description: "Name of the binary property containing the audio sample",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -351,7 +351,7 @@ export const studioDescription: INodeProperties[] = [
     displayOptions: show("generateClips"),
   },
   {
-    displayName: "Img URL",
+    displayName: "Image URL",
     name: "imgUrl",
     type: "string",
     default: "",
@@ -455,7 +455,7 @@ export const studioDescription: INodeProperties[] = [
     ],
     default: "url",
     description:
-      "Whether currentThumbnail is provided as a URL or an n8n binary property",
+      "Whether the current thumbnail is provided as a URL or an n8n binary property",
     displayOptions: show("generateThumbnail"),
   },
   {
@@ -463,7 +463,7 @@ export const studioDescription: INodeProperties[] = [
     name: "currentThumbnail",
     type: "string",
     default: "",
-    description: "CurrentThumbnail as a URL",
+    description: "The current thumbnail as a URL",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -477,7 +477,7 @@ export const studioDescription: INodeProperties[] = [
     name: "currentThumbnailBinaryProperty",
     type: "string",
     default: "data",
-    description: "Name of the binary property containing currentThumbnail",
+    description: "Name of the binary property containing the current thumbnail",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -496,7 +496,7 @@ export const studioDescription: INodeProperties[] = [
     ],
     default: "url",
     description:
-      "Whether subjectImage is provided as a URL or an n8n binary property",
+      "Whether the subject image is provided as a URL or an n8n binary property",
     displayOptions: show("generateThumbnail"),
   },
   {
@@ -504,7 +504,7 @@ export const studioDescription: INodeProperties[] = [
     name: "subjectImage",
     type: "string",
     default: "",
-    description: "SubjectImage as a URL",
+    description: "The subject image as a URL",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -518,7 +518,7 @@ export const studioDescription: INodeProperties[] = [
     name: "subjectImageBinaryProperty",
     type: "string",
     default: "data",
-    description: "Name of the binary property containing subjectImage",
+    description: "Name of the binary property containing the subject image",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -570,7 +570,7 @@ export const studioDescription: INodeProperties[] = [
     displayOptions: show("generateTitles"),
   },
   {
-    displayName: "Num Titles",
+    displayName: "Number of Titles",
     name: "numTitles",
     type: "number",
     default: 0,
@@ -723,7 +723,7 @@ export const studioDescription: INodeProperties[] = [
     displayOptions: show("generateVideo"),
   },
   {
-    displayName: "Start Frame B64 Input Type",
+    displayName: "Start Frame Input Type",
     name: "startFrameB64InputType",
     type: "options",
     options: [
@@ -732,15 +732,15 @@ export const studioDescription: INodeProperties[] = [
     ],
     default: "url",
     description:
-      "Whether startFrameB64 is provided as a URL or an n8n binary property",
+      "Whether the start frame is provided as a URL or an n8n binary property",
     displayOptions: show("generateVideo"),
   },
   {
-    displayName: "Start Frame B64 (URL)",
+    displayName: "Start Frame (URL)",
     name: "startFrameB64",
     type: "string",
     default: "",
-    description: "StartFrameB64 as a URL",
+    description: "The start frame as a URL",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -750,11 +750,11 @@ export const studioDescription: INodeProperties[] = [
     },
   },
   {
-    displayName: "Start Frame B64 Binary Property",
+    displayName: "Start Frame Binary Property",
     name: "startFrameB64BinaryProperty",
     type: "string",
     default: "data",
-    description: "Name of the binary property containing startFrameB64",
+    description: "Name of the binary property containing the start frame",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -764,7 +764,7 @@ export const studioDescription: INodeProperties[] = [
     },
   },
   {
-    displayName: "End Frame B64 Input Type",
+    displayName: "End Frame Input Type",
     name: "endFrameB64InputType",
     type: "options",
     options: [
@@ -773,15 +773,15 @@ export const studioDescription: INodeProperties[] = [
     ],
     default: "url",
     description:
-      "Whether endFrameB64 is provided as a URL or an n8n binary property",
+      "Whether the end frame is provided as a URL or an n8n binary property",
     displayOptions: show("generateVideo"),
   },
   {
-    displayName: "End Frame B64 (URL)",
+    displayName: "End Frame (URL)",
     name: "endFrameB64",
     type: "string",
     default: "",
-    description: "EndFrameB64 as a URL",
+    description: "The end frame as a URL",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -791,11 +791,11 @@ export const studioDescription: INodeProperties[] = [
     },
   },
   {
-    displayName: "End Frame B64 Binary Property",
+    displayName: "End Frame Binary Property",
     name: "endFrameB64BinaryProperty",
     type: "string",
     default: "data",
-    description: "Name of the binary property containing endFrameB64",
+    description: "Name of the binary property containing the end frame",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -848,7 +848,7 @@ export const studioDescription: INodeProperties[] = [
     ],
     default: "url",
     description:
-      "Whether sourceThumbnail is provided as a URL or an n8n binary property",
+      "Whether the source thumbnail is provided as a URL or an n8n binary property",
     displayOptions: show("refineThumbnail"),
   },
   {
@@ -856,7 +856,7 @@ export const studioDescription: INodeProperties[] = [
     name: "sourceThumbnail",
     type: "string",
     default: "",
-    description: "SourceThumbnail as a URL",
+    description: "The source thumbnail as a URL",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -870,7 +870,7 @@ export const studioDescription: INodeProperties[] = [
     name: "sourceThumbnailBinaryProperty",
     type: "string",
     default: "data",
-    description: "Name of the binary property containing sourceThumbnail",
+    description: "Name of the binary property containing the source thumbnail",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -914,7 +914,7 @@ export const studioDescription: INodeProperties[] = [
     ],
     default: "url",
     description:
-      "Whether subjectImage is provided as a URL or an n8n binary property",
+      "Whether the subject image is provided as a URL or an n8n binary property",
     displayOptions: show("refineThumbnail"),
   },
   {
@@ -922,7 +922,7 @@ export const studioDescription: INodeProperties[] = [
     name: "subjectImage",
     type: "string",
     default: "",
-    description: "SubjectImage as a URL",
+    description: "The subject image as a URL",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -936,7 +936,7 @@ export const studioDescription: INodeProperties[] = [
     name: "subjectImageBinaryProperty",
     type: "string",
     default: "data",
-    description: "Name of the binary property containing subjectImage",
+    description: "Name of the binary property containing the subject image",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -962,7 +962,8 @@ export const studioDescription: INodeProperties[] = [
       { name: "URL", value: "url" },
     ],
     default: "url",
-    description: "Whether mask is provided as a URL or an n8n binary property",
+    description:
+      "Whether the mask is provided as a URL or an n8n binary property",
     displayOptions: show("refineThumbnail"),
   },
   {
@@ -970,7 +971,7 @@ export const studioDescription: INodeProperties[] = [
     name: "mask",
     type: "string",
     default: "",
-    description: "Mask as a URL",
+    description: "The mask as a URL",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -984,7 +985,7 @@ export const studioDescription: INodeProperties[] = [
     name: "maskBinaryProperty",
     type: "string",
     default: "data",
-    description: "Name of the binary property containing mask",
+    description: "Name of the binary property containing the mask",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -1022,7 +1023,8 @@ export const studioDescription: INodeProperties[] = [
       { name: "URL", value: "url" },
     ],
     default: "url",
-    description: "Whether image is provided as a URL or an n8n binary property",
+    description:
+      "Whether the image is provided as a URL or an n8n binary property",
     displayOptions: show("scoreThumbnail"),
   },
   {
@@ -1030,7 +1032,7 @@ export const studioDescription: INodeProperties[] = [
     name: "image",
     type: "string",
     default: "",
-    description: "Image as a URL",
+    description: "The image as a URL",
     displayOptions: {
       show: {
         resource: ["studio"],
@@ -1044,7 +1046,7 @@ export const studioDescription: INodeProperties[] = [
     name: "imageBinaryProperty",
     type: "string",
     default: "data",
-    description: "Name of the binary property containing image",
+    description: "Name of the binary property containing the image",
     displayOptions: {
       show: {
         resource: ["studio"],

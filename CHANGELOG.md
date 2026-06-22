@@ -2,6 +2,20 @@
 
 All notable changes to this project are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/); this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.2] - 2026-06-22
+
+n8n submission review fixes (display text / metadata only — no behavior change).
+
+### Changed
+- Codex category `Marketing` → `Marketing & Content`.
+- Spelled out abbreviations in labels: `Timeout (Ms)` → `Timeout`, `Img URL` → `Image URL`,
+  `Min Vph` → `Min Views Per Hour`, `Num Titles` → `Number of Titles`, `Max Result` → `Limit`,
+  `Audio Base64`/`Start Frame B64`/`End Frame B64` → `Audio Sample`/`Start Frame`/`End Frame`.
+- Spelled out the channel Search advanced filters: `Subs`→`Subscriber`, `Avg`→`Average`,
+  `Long`/`Short`→`Long-Form`/`Short-Form`, `7d`/`30d`/`1y` → `(7 Days)`/`(30 Days)`/`(1 Year)`.
+- Rewrote binary-field descriptions to friendly text (no leaked argument names) and reworded
+  operation actions.
+
 ## [0.2.1] - 2026-06-20
 
 ### Changed

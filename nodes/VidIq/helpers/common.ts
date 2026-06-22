@@ -16,7 +16,7 @@ export function optionsField(resource: string): INodeProperties {
     displayOptions: { show: { resource: [resource] } },
     options: [
       {
-        displayName: "Timeout (Ms)",
+        displayName: "Timeout",
         name: "timeout",
         type: "number",
         typeOptions: { minValue: 1000 },

@@ -84,7 +84,7 @@ export const trendDescription: INodeProperties[] = [
     displayOptions: show("trendingVideos"),
   },
   {
-    displayName: "Vph Min",
+    displayName: "Min Views Per Hour",
     name: "vphMin",
     type: "number",
     default: 0,
@@ -215,7 +215,7 @@ export const trendDescription: INodeProperties[] = [
     displayOptions: show("videoOutliers"),
   },
   {
-    displayName: "Min Vph",
+    displayName: "Min Views Per Hour",
     name: "minVph",
     type: "number",
     default: 0,

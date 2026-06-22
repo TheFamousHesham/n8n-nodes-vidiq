@@ -35,7 +35,7 @@ export const videoDescription: INodeProperties[] = [
       {
         name: "Search YouTube",
         value: "searchYoutube",
-        action: "Search you tube",
+        action: "Search videos",
         description: "Search YouTube for videos, channels and playlists",
       },
       {
@@ -109,7 +109,7 @@ export const videoDescription: INodeProperties[] = [
     displayOptions: show("comments"),
   },
   {
-    displayName: "Max Result",
+    displayName: "Limit",
     name: "maxResult",
     type: "number",
     default: 0,
